@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vue.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <h3>字符串类型：{{message}}</h3>
+    <br>
+
+
+    <h3>数字类型{{number}} {{number * 3}}</h3>
+    <br>
+
+    <h3>用户名：{{user.username}},密码：{{user.password}}</h3>
+    <br>
+
+    <h3>列表：用户名：{{users[0].username}},密码：{{users[0].password}}</h3>
+    <br>
+
+
+    <h3>取值表达式toUpperCase：{{user.username.toUpperCase()}}</h3>
+    <br>
+
+
+    v-text测试：<span v-text="message">v-text测试用例</span>
+    <span v-text="user">v-text测试用例</span>
+    <br>
+    <br>
+    <br>
+    v-html测试：
+    <span v-html="vhtml">v-html</span>
+    <br>
+    <br>
+
+
+    事件基本语法：v-on:click,增加数字number
+    <h4>number: {{number}}</h4>
+    <input type="button" value="增加number" @click="add_number">
+    简化写法: v-on:click="add_number" --> @click
+    <input type="button" value="增加number" @click="add_number">
+    <br>
+    事件对应函数的简写+ 参数传递
+    <h3>{{func_var}}</h3>
+    <input type="button" @click="add_var" value="增加">
+    <input type="button" @click="del_var" value="减少">
+    <input type="button" @focus="change_var(5)" value="改变为5">
+    <br>
+    <br>
+    <br>
+    v-show：控制标签是否展示 true false
+    <h3 v-show="true">{{show_flag}}</h3>
+    <h3 v-show="isShow">{{show_flag}}</h3>
+    <input type="button" value="隐藏" @click="hiddenMsg">
+    <input type="button" value="显示" @click="showMsg">
+    <br>
+    v-if使用：
+    <h3 v-if="show_flag" id="a1">{{show_flag}}</h3>
+    <h3 v-else id="a2">欢迎你</h3>
+    <h3 v-else-if="show_flag">加入</h3>
+    <br>
+    v-bind使用:
+    <input type="text" :value="show_flag">
+    <input type="button" value="change_bind" @click="change_bind">
+    <br>
+    v-for:
+    <span v-for="(name, pw) in users">
+        {{name}},{{pw}}
+    </span>
+    <ul v-for="(city, index) in arr">
+        <li>{{city}},{{index}}</li>
+    </ul>
+    <br>
+    <br>
+
+
+    双向绑定：v-model
+    <input type="text" v-model="vmodel">
+    <p>{{vmodel}}</p>
+    <input type="button" value="添加" @click="appendList">
+    <ul v-for="(city, index) in arr">
+        <li>{{city}}{{index}}</li>
+    </ul>
+
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: "hello vue",
+            number: 2,
+            user: {username:"tz",password:"123123"},
+            users:[{username:'tz1',password: "123123"},{username:"tz2",password: "123123"}],
+            arr: ['太原','北京','西安'],
+            vhtml: "<a href='www.baidu.com'>百度一下</a>>",
+            func_var: 1,
+            show_flag: "标签展示标志",
+            isShow: true,
+            vmodel: '百度一下',
+        },
+        methods: {
+            add_number(){
+                this.number ++
+                console.log(this.number)
+            },
+            add_var(){
+                this.func_var ++
+            },
+            del_var(){
+                this.func_var --
+            },
+            change_var(num){
+                this.func_var = num
+            },
+            hiddenMsg(){
+                this.isShow = false
+            },
+            showMsg(){
+                this.isShow = true
+            },
+            change_bind(){
+                this.show_flag = "bind修改show flag"
+            },
+            appendList(){
+                this.arr.unshift(this.vmodel)
+            },
+        },
+    })
+</script>
+
+
+</body>
+</html>
