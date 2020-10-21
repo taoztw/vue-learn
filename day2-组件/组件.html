@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/vue.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <com></com>
+
+
+    <test user="tz"></test>
+    传参数
+    <test user="tztz"></test>
+
+    <br>
+<!--   接受子组件传递过来的参数 绑定父组件的方法 -->
+    子组件传递参数
+    <test @btn="cli"></test>
+</div>
+
+<script>
+    let com = {
+        template:`
+            <div>
+            <h5>{{name}}</h5>
+            <input type="button" @click="change" value="点我"></div>
+        `,
+        data:function (){
+            return {
+                name:"tz"
+            }
+        },
+        methods:{
+            change() {
+                console.log('123')
+            },
+        }
+    }
+
+    // 全局组件的注册 不推荐使用
+    Vue.component("com",com)
+
+    //局部组件
+    let test = {
+        template: `
+            <div>
+        <h1>局部组件</h1>
+<!--        <button @click="cliBut">局部组件点击</button>-->
+        <input type="button" @click="cliBut" value="局部组件点击">
+        </div>
+        `,
+        props:['user'], // 通过props属性来接受父组件传递的参数
+        // beforeCreate(){
+        //   console.log('brfore Create')
+        // },
+        created (){
+            console.log(this.user)
+        },
+        methods:{
+            //子组件触发的函数内部提交一个自定义事件
+            // 参数：事件名，要传递的数据
+            cliBut(){
+                this.$emit('btn','提交的参数')
+            }
+        }
+    }
+
+    new Vue({
+        el:"#app",
+        data:{
+            name:'tz'
+        },
+        components: {
+            test:test,
+        },
+        methods:{
+            cli(a){
+                console.log(a)
+                this.name = a
+            }
+        }
+    })
+</script>
+</body>
+</html>

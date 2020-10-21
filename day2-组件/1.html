@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/vue.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    姓： <input type="text" v-model="fName">
+    名： <input type="text" v-model="lName">
+<!--    对fullName进行加工-->
+    <p>全名：{{fullName}}</p>
+    <br>
+<!--          当listen_name修改时触发  -->
+        姓名：<input type="text" v-model="listen_name">
+        姓：<b>{{ listen_name1 }}</b>
+        名：<b>{{ listen_name2 }}</b>
+    </div>
+
+    <script>
+
+        new Vue({
+            el:"#app",
+            data:{
+                fName:"",
+                lName:"",
+                // fullName:"", 计算属性声明的方法不能再data中重复定义
+                listen_name:"",
+                listen_name1:"",
+                listen_name2:"",
+            },
+            computed:{ <!-- 计算属性 变量名-->
+            fullName() {
+                return this.fName + this.lName
+            },
+        },
+        watch:{ <!--监听事件 变量名-->
+            listen_name(){
+            console.log('test')
+                let tmp = this.listen_name.split(" ")
+                this.listen_name1 = tmp[0]
+                this.listen_name2 = tmp[1]
+            },
+        }
+    })
+
+</script>
+
+<script>
+    // 函数测试
+
+    // 正常函数
+    function add(a){
+        console.log(a)
+    }
+    add(1)
+
+    // 匿名函数
+    let lam = function (a) {
+        console.log('匿名函数',a)
+    }
+    lam(2)
+
+    // 箭头函数
+    let lam2 = (a) => console.log('箭头函数',a) // 一条语句可以省略{}
+    //没有参数 () 不能省略
+    let lam3 = () => console.log('无参数箭头函数')
+    lam3()
+    lam2(1)
+
+    // 回掉函数使用箭头函数不会改变this指向
+
+    let stu1 = {
+        username:'stu1',
+        getName: function (){
+            setTimeout(function (){
+                console.log(this.username)
+            })
+        }
+    }
+    stu1.getName() // undefined
+    let stu2 = {
+        username:'stu2',
+        getName: function (){
+            setTimeout(() => {
+                console.log(this.username)
+            })
+        }
+    }
+    stu2.getName()
+</script>
+
+</body>
+</html>
