@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/vue.min.js"></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <h1>主页</h1>
+    <router-link to="/index">index</router-link>
+    <router-link to="/second">second</router-link>
+    <router-link to="/user/1">user</router-link>
+    <br>
+    <router-link to="/meggageboard?id=3&name=tz">meggageboard</router-link>
+    <br>
+
+<!--    指定路由组件出现的位置-->
+    <router-view></router-view>
+</div>
+
+<script>
+    let index = {
+        template:`
+            <div>
+        <h3>这是首页</h3>
+        <button @click="touser">跳转到user</button></div>>
+        `,
+        methods: {
+            touser(){
+                this.$router.push({path: "/user/2"})
+            }
+        }
+    }
+    let second = {
+        template: `
+        <h3>这是第二页</h3>
+        `,
+    }
+    let nfound = {
+        template:`
+        <h3>资源不存在</h3>
+        `
+    }
+    // 留言板功能范例
+    let meggageboard = {
+        template: `
+          <div>
+
+          <p>{{ $route.query.id}},你好 {{$route.query.name}}</p>
+<!--          <p>{{ $route.params.id}},你好 {{$route.params.name}}</p>-->
+
+          <input type="text" v-model="msg">
+          <input type="button" value="发表留言" @click="add_note">
+
+          <ul>
+            <li v-for="(note, index) in notebook" :key="index">
+              <span>{{ note }}</span> <a href="javascript:;" @click="delNote(index)">删除</a>
+            </li>
+          </ul>
+
+          <span>留言总数量：{{ notebook.length }}条</span>
+          <br>
+          <input v-if="showFlag" type="button" value="删除所有" @click="delAll">
+
+          </div>
+        `,
+        data() {
+            return {
+                notebook: ["测试1", "测试2"],
+                msg: "",
+                showFlag: true,
+            }
+        },
+        methods: {
+            // 添加留言
+            add_note() {
+                let msg = this.msg;
+                if (msg) {
+                    this.notebook.unshift(this.msg);
+                    this.msg = "";
+                    this.showFlag = true
+                }
+            },
+            // 删除留言
+            delNote(index) {
+                console.log(index);
+                this.notebook.splice(index, 1)
+            },
+            // 删除全部留言
+            delAll() {
+                this.notebook = []
+                this.showFlag = false
+            },
+        }
+    }
+    let user = {
+        template: `
+            <div>
+                <p>欢迎：{{$route.params.id}}</p>
+                <button @click="goback">返回到上一页</button></div>>
+        `,
+        methods:{
+            // 返回上一页
+            goback(){
+                this.$router.go(-1)
+            }
+        }
+    }
+    let myRrouter = new VueRouter({
+        routes:[
+            {path:'/index/', component:index},
+            {path:'/second',component: second},
+            {path:"/nfound", component: nfound},
+            {path: "/meggageboard", component: meggageboard},
+            {path: "/user/:id",component: user},
+            {path:"/", redirect: "/index"}, //匹配到/ 重定向到首页
+            {path:"/*", redirect: "/nfound"}, //没有匹配到任何路由
+        ]
+    })
+
+    new Vue({
+        el:"#app",
+        data:{},
+        router:myRrouter,
+    })
+</script>
+
+</body>
+</html>
