@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/vue.min.js"></script>
+    <script src="../js/vuex.3.0.1.js"></script>
+</head>
+<body>
+<div id="app">
+<one></one>
+    <two></two>
+
+</div>
+
+<script>
+
+    let one = {
+        template: `
+          <div>one:
+          <button @click="add">按钮</button>
+          </div>
+        `, methods: {
+            add() {
+                // 提交一个动作 --》 store
+                this.$store.commit("add_data", 1);
+            }
+        }
+    }
+
+    let two = {
+        template: `
+            <div>
+            <span>two : {{$store.getters.result}}</span>
+</div>
+        `
+    }
+
+    let myStore = new Vuex.Store({
+        state: {
+            num_list: [1, 2],
+        },
+        mutations: {
+            add_data: function (state, num) {
+                state.num_list.push(num)
+            }
+        },
+        getters: {
+            result: function (state) {
+                let res = 0;
+                for (let n of state.num_list) {
+                    res += n;
+                }
+                console.log(state.num_list)
+                // console.log(state.num_list.pop())
+                return res;
+            }
+        }
+    })
+
+    new Vue({
+        el: "#app",
+        data: {},
+        components: {
+            one: one,
+            two: two,
+        },
+        store: myStore,
+    })
+</script>
+</body>
+</html>
